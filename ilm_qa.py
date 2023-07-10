@@ -131,7 +131,19 @@ def answer2():
 def answer3():
     print(
         """
-
+     My partner is new to programming and learning R. She asked what a high-level language is, so I explained that it’s a type of 
+    programming language that is not understood by a computer’s processor but can be used to give the computer instructions after 
+    translating it to a low-level language which it understands. High-level languages, such as R and Python, are are more natural 
+    and easier to understand to humans than low-level languages, such as assembly and machine code. Both high-level and low-level 
+    languages are alternative ways of giving a computer instructions. 
+    I gave her the following analogy:
+    Say there’s a blanket factory that can create any pattern you wish. However the factory workers speak a language that very 
+    few people outside the factory understand and they are the only ones who can operate the machines. A designer needs to create a 
+    blanket but is only fluent in a language that is commonly used outside the factory that the workers don’t understand. They write 
+    the instructions for a blanket pattern in the common language and they give them to the factory manager who will translate it into 
+    the worker’s language. The instructions can now be understood by the factory workers. In this analogy, the designer’s language is 
+    farther from the machine, known as a “high-level language”,  while the worker’s language is closer to the machine, known as the 
+    “low-level language”.
     """
     )
 
