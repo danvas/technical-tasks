@@ -1,12 +1,13 @@
 """Questions and answers for Technical Pipeline Director II at ILM.
-This module was developed with python 3.10.
-Run in a terminal with python 3:
+This module was developed and tested in python 3.10.
+
+Run in a terminal:
 >>> `python -m ilm_qa`
 """
 from contextlib import contextmanager
 from dataclasses import dataclass
-from io import BytesIO
 import json
+import unittest
 
 MIN_PR: int = 0
 MAX_PR: int = 10
@@ -35,13 +36,11 @@ class PriorityQueue:
         self.head: Job = None
 
     def is_empty(self) -> bool:
-        """Check whether the queue is empty.
-        """
+        """Check whether the queue is empty."""
         return self.head is None
 
     def enqueue(self, command: Command, priority: int):
-        """Insert a command and its priority (an integer value [0,10]) into the queue.
-        """
+        """Insert a command and its priority (an integer value [0,10]) into the queue."""
         job = Job(command, priority)
         if self.is_empty():
             self.head = job
@@ -56,8 +55,7 @@ class PriorityQueue:
             current.next = job
 
     def dequeue(self) -> Command:
-        """Get the command in the queue with the highest priority.
-        """
+        """Get the command in the queue with the highest priority."""
         if self.is_empty():
             return None
         job = self.head
@@ -65,11 +63,76 @@ class PriorityQueue:
         return job.command
 
     def peek(self) -> Command:
-        """Return the highest priority command.
-        """
+        """Return the highest priority command."""
         if self.is_empty():
             return None
         return self.head.command
+
+
+class Testing(unittest.TestCase):
+    def test_is_empty(self):
+        pq = PriorityQueue()
+        self.assertEqual(pq.is_empty(), True)
+
+    def test_not_is_empty(self):
+        pq = PriorityQueue()
+        pq.enqueue("foo", 5)
+        self.assertEqual(pq.is_empty(), False)
+
+    def test_peek(self):
+        pq = PriorityQueue()
+        pq.enqueue("foo", 5)
+        self.assertEqual(pq.peek(), "foo")
+
+    def test_enqueue(self):
+        pq = PriorityQueue()
+        pq.enqueue("bar", 5)
+        self.assertEqual(pq.peek(), "bar")
+
+    def test_enqueue_dequeue(self):
+        pq = PriorityQueue()
+        pq.enqueue("bar", 5)
+        pq.enqueue("dfo", 9)
+        command = pq.dequeue()
+        self.assertEqual(command, "dfo")
+
+        command = pq.dequeue()
+        self.assertEqual(command, "bar")
+
+        command = pq.dequeue()
+        self.assertEqual(command, None)
+
+    def test_enqueue_dequeue_order(self):
+        commands = [
+            {"command": "zbe", "priority": 7},
+            {"command": "lmy", "priority": 10},
+            {"command": "swc", "priority": 7},
+            {"command": "jtc", "priority": 2},
+            {"command": "slg", "priority": 4},
+            {"command": "rwa", "priority": 10},
+            {"command": "zln", "priority": 1},
+            {"command": "ytm", "priority": 6},
+            {"command": "aou", "priority": 8},
+            {"command": "uuv", "priority": 3},
+        ]
+        pq = PriorityQueue()
+
+        print("\nEnqueueing...\n")
+        for command in commands:
+            (command, priority) = command.values()
+            pq.enqueue(command, priority)
+            print(f"enqueued: {command!r} (priority {priority})")
+
+        print("\nDequeueing...\n")
+        queued_commands = []
+        for _ in range(0, len(commands) + 1):
+            comm = pq.dequeue()
+            if comm:
+                queued_commands.append(comm)
+                print(f"dequeued: {comm!r}")
+
+        expected = ["lmy", "rwa", "aou", "zbe", "swc", "ytm", "slg", "uuv", "jtc", "zln"]
+        self.assertEqual(queued_commands, expected)
 
 
 @contextmanager
@@ -150,30 +213,8 @@ def answer3():
 
 @question("4. Implement a simple priority queue.")
 def answer4():
-    
-    commands_stream = BytesIO(
-        b'[{"command": "zbe", "priority": 7}, {"command": "lmy", "priority": 10}, {"command": "swc", "priority": 7}, {"command": "jtc", "priority": 2}, {"command": "slg", "priority": 4}, {"command": "rwa", "priority": 10}, {"command": "zln", "priority": 1}, {"command": "ytm", "priority": 6}, {"command": "aou", "priority": 8}, {"command": "uuv", "priority": 3}]'
-    )
-    commands = json.load(commands_stream)
-    print(commands)
-    pq = PriorityQueue()
-
-    MAX = len(commands) + 1
-    for command in commands[:MAX]:
-        (command, priority) = command.values()
-        pq.enqueue(command, priority)
-        print(f"enqueued: {command!r} (priority {priority})")
-    print("\nDequeueing...")
-    queued_commands = []
-    for _ in range(0, MAX):
-        comm = pq.dequeue()
-        if comm:
-            queued_commands.append(comm)
-            print(f"dequeued: {comm!r}")
-
-    expected = ["lmy", "rwa", "aou", "zbe", "swc", "ytm", "slg", "uuv", "jtc", "zln"]
-    assert expected == queued_commands, f"Expected order of commands: {expected}; Got: {queued_commands}"
-
+    print(f"See PriorityQueue implementation in ilm_qa.py.  Running unit tests...")
+    unittest.main()
 
 def main():
     answer1()
@@ -184,3 +225,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
